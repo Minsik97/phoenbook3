@@ -17,7 +17,7 @@
 			회사(company): <input type="text" name="company" value="${mVo.company }"> <br> 
 			
 			<!-- 아이디 -->
-		    <input type="hidden" name="id" value ="${mVo.phoneId }"><br>
+		    <input type="hidden" name="phoneId" value ="${mVo.phoneId }"><br>
 			
 			<button type="submit">수정</button>
 		</form>

@@ -12,15 +12,13 @@ public class PhoneVo {
 	public PhoneVo() {}
 
 	public PhoneVo(String name, String hp, String company) {
-		super();
 		this.name = name;
 		this.hp = hp;
 		this.company = company;
 	}
-	
+
 	
 	public PhoneVo(int phoneId, String hp, String company) {
-		super();
 		this.phoneId = phoneId;
 		this.hp = hp;
 		this.company = company;

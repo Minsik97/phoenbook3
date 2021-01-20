@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,7 +42,7 @@ public class PhoneController {
 		//model --> data를 보내는 방법 -->담아 놓으면 된다.
 		model.addAttribute("pList", personList);
 		
-		return "/WEB-INF/views/list.jsp";
+		return "list";
 	}
 	
 	
@@ -50,7 +52,7 @@ public class PhoneController {
 	public String writeForm() {
 		System.out.println("writeForm");
 		
-		return "/WEB-INF/views/writeForm.jsp";
+		return "writeForm";
 	}
 	
 	//http://localhost:8088/phonebook3/phone/write?name=채민식&hp=010-1234-1234&company=02-1234-1234
@@ -73,7 +75,7 @@ public class PhoneController {
 	
 	
 	// 수정폼--> modifyForm
-	@RequestMapping(value = "modifyForm", method = {RequestMethod.GET, RequestMethod.POST})
+	@RequestMapping(value = "/modifyForm", method = {RequestMethod.GET, RequestMethod.POST})
 	public String modifyForm(Model model, @RequestParam("id") int phoneId) {
 		System.out.println("수정 폼");
 		
@@ -84,11 +86,11 @@ public class PhoneController {
 		model.addAttribute("mVo", phoneVo );
 		
 		
-		return "/WEB-INF/views/modifyForm.jsp";
+		return "modifyForm";
 	}
 	
-	// 수정 --> modify
-	@RequestMapping(value = "modify", method = {RequestMethod.GET, RequestMethod.POST})
+	// 수정 --> modify -->RequestParam방법
+	@RequestMapping(value = "/modify2", method = {RequestMethod.GET, RequestMethod.POST})
 	public String modify(@RequestParam("id") int phoneId, @RequestParam("name") String name, @RequestParam("hp") String hp, @RequestParam("company") String company) {
 		System.out.println("수정");
 		
@@ -100,9 +102,21 @@ public class PhoneController {
 		
 		return "redirect:/phone/list";
 	}
-	// 삭제 --> delete
-	@RequestMapping(value = "delete", method = {RequestMethod.GET, RequestMethod.POST})
-	public String delete(@RequestParam("id") int phoneId) {
+	
+	// 수정 --> modify  --> @ModelAttribute
+		@RequestMapping(value = "/modify", method = {RequestMethod.GET, RequestMethod.POST})
+		public String modify(@ModelAttribute PhoneVo phoneVo) {
+			System.out.println("수정");
+			
+			PhoneDao phoneDao = new PhoneDao();
+			phoneDao.personUpdate(phoneVo);
+			
+			return "redirect:/phone/list";
+		}
+	
+	// 삭제 --> delete --> @RequestMapping 약식 표현
+	@RequestMapping("/delete2")
+	public String delete2(@RequestParam("id") int phoneId) {
 		System.out.println("삭제");
 		
 		PhoneDao phoneDao = new PhoneDao();
@@ -111,5 +125,18 @@ public class PhoneController {
 		
 		return "redirect:/phone/list";
 	}
+	
+	@RequestMapping("/delete/{id}")
+	public String delete(@PathVariable("id") int phoneId) {
+		System.out.println("삭제");
+		System.out.println(phoneId);
+		
+		PhoneDao phoneDao = new PhoneDao();
+		phoneDao.phoneDelete(phoneId);
+	
+		return "redirect:/phone/list";
+	}
+	
+	
 
 }
